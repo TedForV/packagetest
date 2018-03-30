@@ -1,0 +1,12 @@
+clientinfo:
+- clientid: 1
+  clientsecret: test1
+
+- clientid: 2
+  clientsecret: test2
+
+- clientid: 3
+  clientsecret: test3
+
+mgodb:
+ conn: mongod:123:2017
