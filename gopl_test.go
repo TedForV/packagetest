@@ -2,6 +2,8 @@ package main
 
 import (
 	"bufio"
+	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"image"
 	"image/color"
@@ -193,4 +195,60 @@ func basename(s string) string {
 		}
 	}
 	return s
+}
+
+func basename2(s string) string {
+	slash := strings.LastIndex(s, "/")
+	s = s[slash+1:]
+	if dot := strings.LastIndex(s, "."); dot >= 0 {
+		s = s[:dot]
+	}
+	return s
+}
+
+func comma(s string) string {
+	n := len(s)
+	if n <= 3 {
+		return s
+	}
+	return comma(s[:n-3]) + "," + s[n-3:]
+}
+
+func intsToString(values []int) string {
+	var buf bytes.Buffer
+	buf.WriteByte('[')
+	for i, v := range values {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+		fmt.Fprintf(&buf, "%d", v)
+	}
+	buf.WriteByte(']')
+	return buf.String()
+}
+
+func Testsha256() {
+	c1 := sha256.Sum256([]byte("x"))
+	c2 := sha256.Sum256([]byte("X"))
+	fmt.Printf("%x\n%x\n%t\n%T\n", c1, c2, c1 == c2, c1)
+}
+
+func appendInt(x []int, y int) []int {
+	var z []int
+	zlen := len(x) + 1
+	if zlen <= cap(x) {
+		//there is room to grow. extend the slice.
+		z = x[:zlen]
+	} else {
+		//there is insufficient space. allocate a new array.
+		//grow by doubling, for amortized linear complexity
+		zcap := zlen
+		if zcap < 2*len(x) {
+			zcap = 2 * len(x)
+		}
+		z = make([]int, zlen, zcap)
+		copy(z, x)
+	}
+	z[len(x)] = y
+	return z
 }
