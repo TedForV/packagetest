@@ -252,3 +252,26 @@ func appendInt(x []int, y int) []int {
 	z[len(x)] = y
 	return z
 }
+
+func spinner(delay time.Duration) {
+	for {
+		for _, r := range `-\|/` {
+			fmt.Printf("\r%c", r)
+			time.Sleep(delay)
+		}
+	}
+}
+
+func fib1(x int) int {
+	if x < 2 {
+		return x
+	}
+	return fib(x-1) + fib(x-2)
+}
+
+func main1() {
+	go spinner(100 * time.Microsecond)
+	const n = 45
+	fibN := fib1(n) //slow
+	fmt.Printf("\rFibonacci(%d) = %d\n", n, fibN)
+}
