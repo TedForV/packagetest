@@ -8,6 +8,7 @@ import (
 	"image"
 	"image/color"
 	"image/gif"
+	"image/jpeg"
 	"io"
 	"io/ioutil"
 	"math"
@@ -274,4 +275,13 @@ func main1() {
 	const n = 45
 	fibN := fib1(n) //slow
 	fmt.Printf("\rFibonacci(%d) = %d\n", n, fibN)
+}
+
+func toJPEG(in io.Reader, out io.Writer) error {
+	img, kind, err := image.Decode(in)
+	if err != nil {
+		return err
+	}
+	fmt.Fprintln(os.Stderr, "Input format =", kind)
+	return jpeg.Encode(out, img, &jpeg.Options{Quality: 95})
 }
