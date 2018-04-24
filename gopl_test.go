@@ -15,6 +15,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -284,4 +285,18 @@ func toJPEG(in io.Reader, out io.Writer) error {
 	}
 	fmt.Fprintln(os.Stderr, "Input format =", kind)
 	return jpeg.Encode(out, img, &jpeg.Options{Quality: 95})
+}
+
+func reflectTest() {
+	x := 2
+	a := reflect.ValueOf(x)
+	b := reflect.ValueOf(x)
+	c := reflect.ValueOf(&x)
+	d := c.Elem()
+
+	fmt.Println(a.CanAddr())
+	fmt.Println(b.CanAddr())
+	fmt.Println(c.CanAddr())
+	fmt.Println(d.CanAddr())
+
 }
